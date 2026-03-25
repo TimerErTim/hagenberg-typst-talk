@@ -1,0 +1,16 @@
+[tasks."compile"]
+description = "Compile the presentation"
+depends = ["compile:?*"]
+
+
+[tasks."compile:presentation"]
+run = [
+    "mkdir -p out",
+    "typst compile main.typ out/2026_Typst_Hagenberg_TimPeko.pdf",
+]
+
+[tasks."compile:handout"]
+run = [
+    "mkdir -p out",
+    "typst compile main.typ out/2026_Typst_Hagenberg_TimPeko_Handout.pdf --input handout=true",
+]

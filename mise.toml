@@ -1,0 +1,14 @@
+[tools]
+typst = "latest"
+
+[env]
+TYPST_FONT_PATHS = "{{config_root}}/common/fonts"
+TYPST_ROOT = "{{config_root}}"
+
+[tasks.fmt]
+description = "Format all source files"
+depends = ["fmt:?*"]
+
+[tasks."fmt:typst"]
+tools = { typstyle = "latest" }
+run = ["typstyle -i ./ --timing"]
