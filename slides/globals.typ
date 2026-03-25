@@ -1,7 +1,8 @@
 #import "@preview/touying:0.6.1": *
-#import "../common/templates/simple.typ": *
 #import "@preview/cetz:0.4.2"
 #import "@preview/fletcher:0.5.8"
+#import "../common/templates/simple.typ": *
+#import "theme.typ": accent-colors, apply-base-theme, base-colors
 
 // Touying compatible utils
 #let cetz-canvas = touying-reducer.with(
@@ -17,43 +18,10 @@
 )
 #let animated(fn) = with-self(self => fn(utils.methods(self)))
 
-// Colors
-#let gray-0 = rgb("#eaeced")
-#let gray-1 = rgb("#dee0e3")
-#let gray-2 = rgb("#adb5bd")
-#let gray-3 = rgb("#6c757d")
-#let gray-4 = rgb("#495057")
-#let gray-5 = rgb("#2b3136")
-#let fg-dark = gray-0
-#let fg-light = gray-5
-
-// SDG Colors
-#let sdg-colors = (
-  goal-1: rgb(229, 35, 61),
-  goal-2: rgb(221, 167, 58),
-  goal-3: rgb(76, 161, 70),
-  goal-4: rgb(197, 25, 45),
-  goal-5: rgb(239, 64, 44),
-  goal-6: rgb(39, 191, 230),
-  goal-7: rgb(251, 196, 18),
-  goal-8: rgb(163, 28, 68),
-  goal-9: rgb(242, 106, 45),
-  goal-10: rgb(224, 20, 131),
-  goal-11: rgb(248, 157, 42),
-  goal-12: rgb(191, 141, 44),
-  goal-13: rgb(64, 127, 70),
-  goal-14: rgb(31, 151, 212),
-  goal-15: rgb(89, 186, 72),
-  goal-16: rgb(18, 106, 159),
-  goal-17: rgb(19, 73, 107),
-)
-#let sdg-color-map = sdg-colors.values()
-#let get-sdg-color(index, offset: 0) = sdg-color-map.at(calc.rem(index + offset, sdg-color-map.len()))
-
-
 #let slides(handout: false, body) = {
-  set text(lang: "de")
+  set text(lang: "de", font: "Roboto")
   show: apply-base-theme
+
   simple-slides(
     config-info(
       title: [Open Source Software],
@@ -77,29 +45,61 @@
 }
 
 #let master-slide(
-  invert: false,
   config: (:),
   repeat: auto,
   body,
 ) = {
-  set text(font: "JetBrainsMono NF", fill: if invert { fg-dark } else {
-    fg-light
-  })
-  //show text: upper
-
-  slide(
-    config: config,
-    repeat: repeat,
-    {
+  touying-slide-wrapper(self => {
+    touying-slide(
+      self: self,
+      config: config,
+      repeat: repeat,
       {
-        place(right + bottom, dx: -1cm, dy: -1cm)[
-          #context utils.slide-counter.display()
-        ]
-      }
+        let content = {
+          {
+            place(right + bottom, dx: -1cm, dy: -1cm)[
+              #context utils.slide-counter.display()
+            ]
+          }
 
-      body
-    },
-  )
+          body
+        }
+
+        if self.handout {
+          content
+        } else {
+          let pseudoslides = 3
+          let pseudoslide-offset = 3mm
+          let pseudoslide-stroke-thickness = 3pt
+          show: align.with(center + horizon)
+          show: block.with(width: 100%, height: 100%, inset: 0.8cm)
+          show: move.with(
+            dy: -pseudoslides * pseudoslide-offset,
+            dx: pseudoslides * pseudoslide-offset,
+          )
+
+          let doc = range(pseudoslides).fold(content, (doc, idx) => move(
+            dy: pseudoslide-offset,
+            dx: -pseudoslide-offset,
+            box(
+              doc,
+              width: 100%,
+              height: 100%,
+              inset: if idx == 0 { pseudoslide-stroke-thickness / 2 } else {
+                0mm
+              },
+              stroke: base-colors.overlay2 + pseudoslide-stroke-thickness,
+              fill: white.darken(
+                5% * idx,
+              ),
+            ),
+          ))
+
+          doc
+        }
+      },
+    )
+  })
 }
 
 #let focus-slide(
@@ -240,7 +240,12 @@
         (
           grid.cell(y: 0, x: idx, {
             show: move.with(dy: 1.5cm)
-            show: box.with(stroke: gray-5, fill: gray-0, inset: 3mm, radius: 100%)
+            show: box.with(
+              stroke: gray-5,
+              fill: gray-0,
+              inset: 3mm,
+              radius: 100%,
+            )
             set text(size: 16pt, weight: "bold")
             col.header
           }),
@@ -299,7 +304,10 @@
     sidecontent: {
       show: box.with(height: 100%, width: 100%, fill: gray-1)
       show: align.with(center + horizon)
-      place(right + horizon, dx: 1cm, rotate(90deg, polygon.regular(fill: gray-1, size: 1.5cm)))
+      place(right + horizon, dx: 1cm, rotate(90deg, polygon.regular(
+        fill: gray-1,
+        size: 1.5cm,
+      )))
       side-image
     },
     config: config,
@@ -317,29 +325,35 @@
   config: (:),
   repeat: auto,
 ) = {
-  sided-base-slide(config: config, repeat: repeat, title, subcontent: subcontent, sidecontent: {
-    show: box.with(inset: (right: 0pt, rest: 1cm), width: 100%, height: 100%)
-    let grids = (
+  sided-base-slide(
+    config: config,
+    repeat: repeat,
+    title,
+    subcontent: subcontent,
+    sidecontent: {
+      show: box.with(inset: (right: 0pt, rest: 1cm), width: 100%, height: 100%)
+      let grids = (
+        grid(
+          columns: (1fr, auto),
+          rows: (1fr,),
+          gutter: 2mm,
+          frame-1, frame-2,
+        ),
+        grid(
+          columns: (auto, 1fr),
+          rows: (1fr,),
+          gutter: 2mm,
+          frame-3, frame-4,
+        ),
+      ).map(it => {
+        set grid.cell(fill: gray-1, align: center)
+        it
+      })
       grid(
-        columns: (1fr, auto),
-        rows: (1fr,),
+        rows: (1fr, 1fr),
         gutter: 2mm,
-        frame-1, frame-2,
-      ),
-      grid(
-        columns: (auto, 1fr),
-        rows: (1fr,),
-        gutter: 2mm,
-        frame-3, frame-4,
-      ),
-    ).map(it => {
-      set grid.cell(fill: gray-1, align: center)
-      it
-    })
-    grid(
-      rows: (1fr, 1fr),
-      gutter: 2mm,
-      ..grids,
-    )
-  })
+        ..grids,
+      )
+    },
+  )
 }

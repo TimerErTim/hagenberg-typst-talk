@@ -1,3 +1,7 @@
 {
-    "git.enabled": false
+    "git.enabled": false,
+    "tinymist.fontPaths": [
+        "${workspaceFolder}/common/fonts"
+    ],
+    "tinymist.rootPath": "${workspaceFolder}"
 }
