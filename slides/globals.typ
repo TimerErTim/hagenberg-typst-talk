@@ -24,8 +24,8 @@
 
   simple-slides(
     config-info(
-      title: [Open Source Software],
-      subtitle: [Wie viel Last kann sie tragen?],
+      title: image("assets/typst-seeklogo-cropped.svg", width: 7cm),
+      subtitle: [Einführung und Workshop],
       author: [Tim Peko],
       date: datetime(year: 2026, month: 1, day: 22),
       institution: [FH Hagenberg],
@@ -68,34 +68,41 @@
         if self.handout {
           content
         } else {
-          let pseudoslides = 3
           let pseudoslide-offset = 3mm
           let pseudoslide-stroke-thickness = 3pt
-          show: align.with(center + horizon)
-          show: block.with(width: 100%, height: 100%, inset: 0.8cm)
-          show: move.with(
-            dy: -pseudoslides * pseudoslide-offset,
-            dx: pseudoslides * pseudoslide-offset,
-          )
-
-          let doc = range(pseudoslides).fold(content, (doc, idx) => move(
-            dy: pseudoslide-offset,
-            dx: -pseudoslide-offset,
-            box(
-              doc,
-              width: 100%,
-              height: 100%,
-              inset: if idx == 0 { pseudoslide-stroke-thickness / 2 } else {
-                0mm
-              },
-              stroke: base-colors.overlay2 + pseudoslide-stroke-thickness,
-              fill: white.darken(
-                5% * idx,
+          set page(background: context {
+            let pseudoslides = calc.min(utils.slide-counter.final().first() - utils.slide-counter.get().first() - 1, 3)
+            show: move.with(
+              dy: -(pseudoslides + 1) * pseudoslide-offset,
+              dx: (pseudoslides + 1) * pseudoslide-offset,
+            )
+            range(pseudoslides).fold([], (doc, idx) => move(
+              dy: pseudoslide-offset,
+              dx: -pseudoslide-offset,
+              box(
+                doc,
+                width: 100%,
+                height: 100%,
+                inset: 0mm,
+                outset: -0.8cm,
+                stroke: accent-colors.sky + pseudoslide-stroke-thickness,
+                fill: white.darken(
+                  5% * (idx + 1),
+                ),
               ),
-            ),
-          ))
+            ))
+          })
+          show: rect.with(
+            width: 100%,
+            height: 100%,
+            inset: 0.8cm + pseudoslide-stroke-thickness / 2,
+            outset: -0.8cm,
+            stroke: accent-colors.sky + pseudoslide-stroke-thickness,
+            fill: white,
+          )
+          show: align.with(center + horizon)
 
-          doc
+          content
         }
       },
     )

@@ -1,5 +1,6 @@
 #import "globals.typ": *
 
+#show: it => range(10).fold([], (doc, idx) => [#doc #it])
 
 // Title slide
 #master-slide(with-self(self => [
@@ -14,15 +15,15 @@
         stroke: (left: base-colors.mantle + 1mm),
         inset: (left: 1cm),
       )
-      show text: upper
       self.info.title
       [\ ]
+      show text: upper
       set text(size: 24pt, weight: "regular")
       self.info.subtitle
     }
 
     #set text(size: 15pt, weight: "regular")
-    #box(height: 15pt * 2, baseline: 8pt, self.info.logo)
+    #box(height: 15pt * 2, baseline: 8pt, self.info.logo) #h(5mm)
     #self.info.institution, #self.info.date.display(self.datetime-format)
   ]
   #place(left + bottom, dx: 1cm, dy: -1cm)[
