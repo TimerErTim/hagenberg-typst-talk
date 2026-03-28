@@ -54,7 +54,7 @@ caption: [Comparing typesetting engines.]
 
 #let n = 10
 
-Typst is a functional programming language. So let's have @prime-table be filled with the first #n primes automatically:
+Typst is a functional programming language. So let's have @prime-table be filled with the first #n prime numbers automatically:
 
 #let is-prime(x) = {
     if x < 2 {
