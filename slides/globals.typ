@@ -18,13 +18,18 @@
 )
 #let animated(fn) = with-self(self => fn(utils.methods(self)))
 
+#let typst-text-show-rule = ```typst
+#show regex("(?i)typst"): text(fill: rgb("#239dad"), font: "Buenard", weight: "bold", "typst")
+#doc
+```
+
 #let slides(handout: false, body) = {
   set text(lang: "de", font: "Roboto")
   show: apply-base-theme
 
-  simple-slides(
+  let slides = simple-slides(
     config-info(
-      title: image("assets/typst-seeklogo-cropped.svg", width: 7cm),
+      title: [typSt],
       subtitle: [Einführung und Workshop],
       author: [Tim Peko],
       date: datetime(year: 2026, month: 1, day: 22),
@@ -42,6 +47,8 @@
     ),
     body,
   )
+
+  eval(typst-text-show-rule.text, mode: "markup", scope: (doc: slides))
 }
 
 #let master-slide(
