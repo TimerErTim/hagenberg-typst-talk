@@ -1,4 +1,5 @@
 #import "@preview/touying:0.6.1": *
+#import "@preview/suiji:0.5.1" as sj 
 #import "@preview/cetz:0.4.2"
 #import "@preview/fletcher:0.5.8"
 #import "@preview/eqalc:0.1.4": math-to-func
