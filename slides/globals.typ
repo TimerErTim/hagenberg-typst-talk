@@ -118,7 +118,6 @@
             stroke: accent-colors.sky + pseudoslide-stroke-thickness,
             fill: white,
           )
-          show: align.with(center + horizon)
 
           content
         }
