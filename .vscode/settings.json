@@ -3,5 +3,6 @@
     "tinymist.fontPaths": [
         "${workspaceFolder}/common/fonts"
     ],
-    "tinymist.rootPath": "${workspaceFolder}"
+    "tinymist.rootPath": "${workspaceFolder}",
+    "tinymist.onPaste": "$root/slides/assets"
 }

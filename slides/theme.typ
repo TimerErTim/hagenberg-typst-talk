@@ -7,6 +7,16 @@
 #let base-colors = (
   latte.colors.pairs().filter(((k, v)) => not v.accent).map(((k, v)) => (k, v.rgb)).to-dict()
 )
+#let color-cycle = (
+  accent-colors.blue,
+  accent-colors.yellow,
+  accent-colors.mauve,
+  accent-colors.red,
+  accent-colors.green,
+  accent-colors.sky,
+  accent-colors.peach,
+  accent-colors.pink
+)
 
 #let apply-base-theme(doc) = {
   show: catppuccin.with(latte)
@@ -14,17 +24,7 @@
 
 
   // Style lilaq diagrams
-  let cycle = (
-    accent-colors.blue,
-    accent-colors.yellow,
-    accent-colors.mauve,
-    accent-colors.red,
-    accent-colors.green,
-    accent-colors.sky,
-    accent-colors.peach,
-    accent-colors.pink
-  )
-  show: lq.set-diagram(cycle: cycle)
+  show: lq.set-diagram(cycle: color-cycle)
   show: lq.set-spine(stroke: base-colors.overlay2)
   show: lq.set-grid(stroke: base-colors.crust)
 

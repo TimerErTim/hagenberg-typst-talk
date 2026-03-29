@@ -1,7 +1,7 @@
 
 #import "../common/templates/simple.typ": *
 #import "deps.typ": *
-#import "theme.typ": accent-colors, apply-base-theme, base-colors
+#import "theme.typ": accent-colors, apply-base-theme, base-colors, color-cycle
 
 // Touying compatible utils
 #let cetz-canvas = touying-reducer.with(
@@ -28,16 +28,6 @@
   show: codly-init.with()
   show: apply-base-theme
 
-  // Style codly
-  codly(
-    breakable: false,
-    number-align: right,
-    smart-skip: true,
-    languages: codly-languages,
-    smart-indent: true,
-    skip-last-empty: true,
-  )
-
   let slides = simple-slides(
     config-info(
       title: [typSt],
@@ -55,6 +45,17 @@
     config-common(
       datetime-format: "[day].[month].[year]",
       handout: handout,
+      preamble: {
+        // Style codly
+        codly(
+          breakable: false,
+          number-align: right,
+          smart-skip: true,
+          languages: codly-languages,
+          smart-indent: true,
+          skip-last-empty: true,
+        )
+      },
     ),
     body,
   )
@@ -80,6 +81,7 @@
             ]
           }
 
+          set text(size: 18pt)
           body
         }
 
@@ -200,11 +202,11 @@
 ) = {
   master-slide(config: config, repeat: repeat, {
     {
-      show: align.with(top + center)
-      show: pad.with(top: 2cm, bottom: 1cm)
-      show: box.with(height: 2.5cm)
-      set text(size: 28pt, weight: "bold")
-      par(spacing: 0cm, title)
+      show: align.with(top + left)
+      show: pad.with(top: 2cm, bottom: 1cm, x: 2cm)
+      show: box.with(height: 1cm)
+      set text(size: 28pt)
+      par(spacing: 0cm, strong(title))
       if subtitle != none {
         set text(size: 20pt)
         subtitle
@@ -283,33 +285,32 @@
 }
 
 #let sided-base-slide(
-  title,
+  title: none,
   subcontent: none,
-  sidecontent: none,
+  sidecontent,
   config: (:),
   repeat: auto,
 ) = {
   master-slide(config: config, repeat: repeat, {
+    show: pad.with(2cm)
     grid(
-      columns: (auto, auto),
-      gutter: 1.5cm,
-      sidecontent,
-      grid.cell(x: 1, y: 0, {
+      columns: (7cm, 1fr),
+      gutter: 2cm,
+      grid.cell(x: 0, y: 0, {
         show: align.with(left)
-        show: pad.with(right: 1cm, bottom: 1cm)
 
         {
-          show: align.with(top + right)
           show: pad.with(top: 2cm, bottom: 1cm)
           show: box.with(height: 2cm)
-          show: upper
-          set text(size: 24pt, weight: "bold")
+          show: align.with(bottom)
+          set text(size: 22pt)
           set par(justify: false)
-          title
+          strong(title)
         }
 
         subcontent
       }),
+      sidecontent,
     )
   })
 }

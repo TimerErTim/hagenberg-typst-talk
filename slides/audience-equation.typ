@@ -1,3 +1,3 @@
 $
-  f(x) = sqrt(e^x) + sin(e^x)
+  f(x) =  + sin(e^cos(x))
 $
