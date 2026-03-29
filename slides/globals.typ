@@ -1,7 +1,6 @@
-#import "@preview/touying:0.6.1": *
-#import "@preview/cetz:0.4.2"
-#import "@preview/fletcher:0.5.8"
+
 #import "../common/templates/simple.typ": *
+#import "deps.typ": *
 #import "theme.typ": accent-colors, apply-base-theme, base-colors
 
 // Touying compatible utils
@@ -25,7 +24,19 @@
 
 #let slides(handout: false, body) = {
   set text(lang: "de", font: "Roboto")
+  show math.equation: set text(font: "Fira Math")
+  show: codly-init.with()
   show: apply-base-theme
+
+  // Style codly
+  codly(
+    breakable: false,
+    number-align: right,
+    smart-skip: true,
+    languages: codly-languages,
+    smart-indent: true,
+    skip-last-empty: true,
+  )
 
   let slides = simple-slides(
     config-info(
@@ -193,7 +204,6 @@
       show: align.with(top + center)
       show: pad.with(top: 2cm, bottom: 1cm)
       show: box.with(height: 2.5cm)
-      show: upper
       set text(size: 28pt, weight: "bold")
       par(spacing: 0cm, title)
       if subtitle != none {
