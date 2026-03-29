@@ -91,11 +91,11 @@
           set page(background: context {
             let pseudoslides = calc.min(utils.slide-counter.final().first() - utils.slide-counter.get().first() - 1, 3)
             show: move.with(
-              dy: -(pseudoslides + 1) * pseudoslide-offset,
+              dy: (pseudoslides + 1) * pseudoslide-offset,
               dx: (pseudoslides + 1) * pseudoslide-offset,
             )
             range(pseudoslides).fold([], (doc, idx) => move(
-              dy: pseudoslide-offset,
+              dy: -pseudoslide-offset,
               dx: -pseudoslide-offset,
               box(
                 doc,
@@ -105,7 +105,7 @@
                 outset: -0.8cm,
                 stroke: accent-colors.sky + pseudoslide-stroke-thickness,
                 fill: white.darken(
-                  5% * (idx + 1),
+                  10% * (idx + 1),
                 ),
               ),
             ))
