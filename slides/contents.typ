@@ -176,6 +176,7 @@
       data.map(((x, y)) => x),
       data.map(((x, y)) => y),
       mark: none,
+      smooth: true,
       label: [
         #set text(size: 8pt)
         Publikumsfunktion #eq-data.fx-math
