@@ -190,11 +190,31 @@
     Labor Analyse
   ],
   subcontent: [
-    #pause
-    #show: box.with(inset: (left: -1cm, bottom: -1cm))
-    #image("assets/gru-equation.png")
+    #let file-path = "assets/histidin_curve_v1.csv"
+    #let (headers, ..data) = csv(file-path, delimiter: ";")
+    #show table: set block(breakable: false)
+    #show: align.with(right)
+    #set text(size: 16pt)
+    #table(
+      columns: (auto, auto),
+      fill: white,
+      table.header(table.cell(colspan: 2, strong(file-path.split("/").last()))),
+      table.header(..for head in headers {
+        ((emph(head)),)
+      }),
+      ..for entry in data.flatten() {
+        ([#entry],)
+      }
+    )
   ],
 )[
+  #pause
+  #show: align.with(bottom + left)
+  #show: box.with(fill: base-colors.text)
+  #pin(21)
+  #image("assets/histidin-curve-1.png")
+  #pin(22)
+  #pinit-arrow((21, 22), (21, 22), start-dx: -1.8cm, end-dx: -2mm, fill: accent-colors.rosewater, thickness: 4pt, start-dy: 2cm, end-dy: 2cm)
 ]
 
 #titled-slide(
