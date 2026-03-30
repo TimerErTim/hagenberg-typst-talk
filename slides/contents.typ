@@ -71,34 +71,60 @@
   #show: pad.with(left: 2cm)
   #pause
   Tim Peko #pin(2)
-  #pinit-arrow(2, (1, 3), fill: accent-colors.rosewater)
+  #pinit-arrow(2, (1, 3), fill: accent-colors.rosewater, thickness: 1.5pt)
   \
+  #show: block.with(width: 100%, height: 1fr, inset: (bottom: 2cm))
   #pause
-  4. Semster MBI in Hagenberg
-  steht auf Typst
+  #place(left + bottom, dx: 2cm, dy: -5cm)[
+    #show: rotate.with(-5deg, reflow: true)
+    HTL Grieskirchen
+  ]
+  #pause
+  #place(left + bottom, dx: 0cm, dy: -2cm)[
+    #show: rotate.with(8deg, reflow: true)
+    4. Semester MBI in Hagenberg
+  ]
+  #pause
+  #place(left + bottom)[
+    #show: rotate.with(0deg, reflow: true)
+    steht auf Typst + vermutlich Geek
+  ]
+  #pause
+  #place(left + bottom, dx: 9cm)[
+    #show: rotate.with(-15deg, reflow: true)
+    erster Vortrag
+    #color-cycle.fold(image("assets/spongebob-innocent.png", width: 5cm), (acc, color) => block(acc, fill: color, inset: 0.5pt, radius: 1cm, clip: true))
+  ]
 ])
 
 // Agenda
 #titled-slide[Ablauf][
-  #show: align.with(center + horizon)
+  #v(-2cm)
+  #show: align.with(center + top)
   #let contents = (
     [
-      #pin(1)
-      Vortrag\
-      WIR SIND SCHON MITTEN DRIN
+      Vortrag
     ],
     [
-      #pin(2)
       Hands-On
     ],
     [
-      #pin(3)
       Q & A
     ],
   )
+  #let top-contents = (
+    box(clip: true, width: 3cm, height: 4cm, align(top + left, image("assets/YouAreHere.svg", width: 6cm, height: 8cm, fit: "contain"))),
+    [
+      #image("assets/typst-webapp-preview-handson.png", width: 5cm)
+    ],
+    [
+      #image("assets/q-n-a.png", width: 4cm)
+    ]
+  )
+
   #fletcher-diagram(
     spacing: 1cm,
-    for (index, content) in contents.enumerate() {
+    for (index, (content, top-content)) in contents.zip(top-contents).enumerate() {
       let color = color-cycle.at(calc.rem(index, color-cycle.len()))
       (
         pause,
@@ -111,6 +137,10 @@
           width: 7cm,
           height: 3cm,
         ),
+        fletcher.node(
+          (index, -1),
+          top-content,
+        )
       )
     },
   )
