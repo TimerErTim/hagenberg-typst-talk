@@ -31,7 +31,7 @@
   let slides = simple-slides(
     config-info(
       title: [typSt],
-      subtitle: [Einführung und Workshop],
+      subtitle: [Wie man Dokumente programmiert],
       author: [Tim Peko],
       date: datetime(year: 2026, month: 1, day: 22),
       institution: [FH Hagenberg],
