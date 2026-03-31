@@ -77,7 +77,7 @@
         let content = {
           {
             place(right + bottom, dx: -1cm, dy: -1cm)[
-              #context utils.slide-counter.display()
+              #context utils.slide-counter.display() <slide-number>
             ]
           }
 
@@ -86,12 +86,25 @@
         }
 
         if self.handout {
+          show: rect.with(
+            width: 100%,
+            height: 100%,
+            inset: 0pt,
+            stroke: none,
+          )
           content
         } else {
           let pseudoslide-offset = 3mm
           let pseudoslide-stroke-thickness = 3pt
           set page(background: context {
-            let pseudoslides = calc.min(utils.slide-counter.final().first() - utils.slide-counter.get().first() - 1, 3)
+            let pseudoslides = calc.min(
+              utils.slide-counter.final().first()
+                - utils
+                  .slide-counter
+                  .at(query(selector(label("slide-number")).after(here())).first().location())
+                  .first(),
+              3,
+            )
             show: move.with(
               dy: (pseudoslides + 1) * pseudoslide-offset,
               dx: (pseudoslides + 1) * pseudoslide-offset,
