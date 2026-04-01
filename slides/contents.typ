@@ -38,7 +38,7 @@
         .map(((content, alignment)) => grid.cell(align: alignment, content))
     )
   }
-  #place(top + left, block(width: 100%, height: 100%, fill: white.transparentize(50%)))
+  #place(top + left, block(width: 100%, height: 100%, fill: white.transparentize(25%)))
   #place(bottom + center, dy: -2cm, line(length: 95%, stroke: accent-colors.rosewater + 2pt))
   #set text(size: 12pt)
   #place(center + horizon)[
@@ -93,13 +93,19 @@
   #place(left + bottom, dx: 9cm)[
     #show: rotate.with(-15deg, reflow: true)
     erster Vortrag
-    #color-cycle.fold(image("assets/spongebob-innocent.png", width: 5cm), (acc, color) => block(acc, fill: color, inset: 0.5pt, radius: 1cm, clip: true))
+    #color-cycle.fold(image("assets/spongebob-innocent.png", width: 5cm), (acc, color) => block(
+      acc,
+      fill: color,
+      inset: 0.5pt,
+      radius: 1cm,
+      clip: true,
+    ))
   ]
 ])
 
 // Agenda
 #titled-slide[Ablauf][
-  #v(-2cm)
+  #v(-1cm)
   #show: align.with(center + top)
   #let contents = (
     [
@@ -113,13 +119,18 @@
     ],
   )
   #let top-contents = (
-    box(clip: true, width: 3cm, height: 4cm, align(top + left, image("assets/YouAreHere.svg", width: 6cm, height: 8cm, fit: "contain"))),
+    box(clip: true, width: 3cm, height: 4cm, align(top + left, image(
+      "assets/YouAreHere.svg",
+      width: 6cm,
+      height: 8cm,
+      fit: "contain",
+    ))),
     [
-      #image("assets/typst-webapp-preview-handson.png", width: 5cm)
+      #image("assets/hands-on-meme.png", width: 5cm)
     ],
     [
       #image("assets/q-n-a.png", width: 4cm)
-    ]
+    ],
   )
 
   #fletcher-diagram(
@@ -140,11 +151,208 @@
         fletcher.node(
           (index, -1),
           top-content,
-        )
+        ),
       )
     },
   )
 ]
+
+// What is Typst?
+#sided-base-slide(
+  title: [Was ist Typst?],
+  subcontent: [
+    #let heart-wrap(body, fill: none, stroke: accent-colors.red, padding: 15pt) = context {
+      // 1. Measure the text/content
+      let size = measure(body)
+
+      // 2. Add padding to ensure the text doesn't touch the edges
+      let w = size.width + padding * 2
+      let h = size.height + padding * 2
+
+      cetz.canvas({
+        import cetz.draw: bezier, content, group, merge-path, move-to, scale
+
+        // 3. Determine scale factors.
+        // The mathematical heart below is roughly 3 units wide and 2.2 units tall.
+        let sx = w.cm() / 2
+        let sy = h.cm() / 1.5
+
+        // 4. Draw the scaled heart shape using bezier curves
+        group({
+          scale(x: sx, y: sy)
+          merge-path(close: true, fill: fill, stroke: stroke, {
+            // Start at the bottom tip
+            move-to((0, -1.5))
+            // Curve up to the center cleft (Right lobe)
+            bezier((0, -1.5), (0, 0.5), (3, 0), (2, 1.5))
+            // Curve back down to the bottom tip (Left lobe)
+            bezier((0, 0.5), (0, -1.5), (-2, 1.5), (-3, 0))
+          })
+        })
+
+        // 5. Place the content.
+        // We offset it slightly upwards because a heart is wider at the top.
+        content((0, 0), body)
+      })
+    }
+    #pause
+    #heart-wrap(stroke: accent-colors.red + 4pt, [
+      #show: pad.with(top: 1cm, bottom: -5mm)
+      #show: box.with(width: 3cm, height: 3cm, inset: -5mm)
+      #place(left + top, image("assets/word-logo.png", width: 2cm))
+      #place(right + top, image("assets/latex-logo.svg", width: 2cm))
+      #place(center + bottom, image("assets/markdown-logo.svg", width: 2cm))
+    ])
+    #pause
+  ],
+)[
+  #show: align.with(center + horizon)
+  #show: box.with(width: 100%, height: 100%)
+  #set text(size: 16pt)
+  #show grid.cell: align.with(center + horizon)
+  #set par(spacing: 5mm)
+  #show heading.where(level: 2): it => align(top, text(size: 18pt)[*#it*])
+  #let color-index(x, y) = calc.rem(y * 2 + x + 2, color-cycle.len())
+  #show grid.cell: it => {
+    if it.y == auto or it.y == none {
+      return it
+    }
+
+    show heading: text.with(fill: color-cycle.at(color-index(it.x, it.y)).lighten(0%))
+    it
+  }
+  #grid(
+    columns: (1fr, 1fr),
+    rows: (1fr, 1fr),
+    inset: 5mm,
+    gutter: 2mm,
+    fill: base-colors.crust,
+    stroke: base-colors.surface0,
+    [
+      == Open Source
+      #image("assets/GitHub_Invertocat_Black.svg", width: 1.8cm)
+      *400+* Contributors\
+      *50k+* Stars
+    ],
+    [
+      #show: only.with("4-")
+      #heading(level: 2)[
+        #show: text.with(fill: codly-languages.rust.color)
+        Rust
+      ]
+      #block(codly-languages.rust.icon, height: 4em)
+      _*Blazingly fast!*_
+    ],
+    grid.cell(colspan: 2)[
+      #show: only.with("5-")
+      == Geschichte
+
+      #grid(
+        columns: (auto, auto, auto),
+        rows: 3cm,
+        gutter: 2mm,
+        align: center,
+        figure(image("assets/martin_haug.webp"), numbering: none, caption: [Martin Haug]),
+        [Seit *2019* in Entwicklung\
+          Gegründet *2023* in *Berlin*],
+        figure(image("assets/laurenz-madje.webp"), numbering: none, caption: [Laurenz Mädje]),
+      )
+    ],
+  )
+]
+
+#let typst-compiled(code, mode: "markup", direction: "horizontal") = {
+  grid(
+    columns: if direction == "horizontal" { (1fr, auto, 1fr) } else { 1 },
+    rows: if direction == "horizontal" { auto } else { (auto, auto, auto) },
+    column-gutter: 2mm,
+    row-gutter: 4mm,
+    align: if direction == "horizontal" { horizon } else { center },
+    code,
+    if direction == "horizontal" { sym.arrow.r } else { sym.arrow.b }, eval(code.text, mode: mode),
+  )
+}
+
+// Why fall in love
+#three-bodied-column-slide(
+  [
+    Warum Typst?
+  ],
+  content-description(
+    [
+      #set text(size: 12pt)
+      #codly-enable()
+      #codly(stroke: accent-colors.mauve + 1pt)
+      #typst-compiled(
+        ```typst
+        #for i in range(4) [
+           $#i^3 = #calc.pow(i, 3)$\
+        ]
+        ```,
+        direction: "vertical",
+      )
+    ],
+    [
+      #show: strong
+      Programmierbar\
+      & Doc-as-Code
+      #pause
+    ],
+  ),
+  content-description(
+    [
+      #codly-disable()
+      #set text(size: 12pt)
+      ```log
+      error: unknown variable: a
+          ┌─ contents.typ:271:3
+          │
+      271 │  #(a * 3)
+          │    ^
+          │
+      help: error occurred while importing this module
+          ┌─ main.typ:9:9
+          │
+       9  │ #include "contents.typ"
+          │          ^^^^^^^^^^^^^^
+      ```
+    ],
+    [
+      #show: strong
+      Hilfreiche Fehlermeldungen
+
+      #pause
+    ],
+  ),
+  content-description(
+    [
+      #set text(size: 12pt)
+      #show quote.where(block: true): set par(justify: true)
+      #quote(block: true, attribution: [Typst README])[
+        There are two ways to make something flexible: Have a knob for everything or have a few knobs that you can combine in many ways. Typst is designed with the second way in mind.
+      ]
+    ],
+    [
+      #show: strong
+      Flexibel durch Komposition
+    ],
+  ),
+)
+
+#three-bodied-column-slide(
+  [Warum typst?],
+  content-description([
+    
+  ], [
+    asd
+    #pause
+  ]),
+  content-description(
+    [asd],
+    [],
+  ),
+  content-description([asd], [asd]),
+)
 
 #sided-base-slide(
   title: [
@@ -159,7 +367,7 @@
 )[
   #let equation = include "audience-equation.typ"
   #{
-    set text(size: 22pt)
+    set text(size: 22pt, fill: accent-colors.mauve)
     equation
   }
 
@@ -181,6 +389,7 @@
         #set text(size: 8pt)
         Publikumsfunktion #eq-data.fx-math
       ],
+      stroke: accent-colors.mauve + 2pt,
     ),
   )
 ]
@@ -200,22 +409,33 @@
       columns: (auto, auto),
       fill: white,
       table.header(table.cell(colspan: 2, strong(file-path.split("/").last()))),
-      table.header(..for head in headers {
-        ((emph(head)),)
-      }),
+      table.header(
+        ..for head in headers {
+          ((emph(head)),)
+        },
+      ),
       ..for entry in data.flatten() {
         ([#entry],)
-      }
+      },
     )
   ],
 )[
   #pause
   #show: align.with(bottom + left)
-  #show: box.with(fill: base-colors.text)
   #pin(21)
+  #show: box.with(fill: base-colors.text, inset: 1mm)
   #image("assets/histidin-curve-1.png")
   #pin(22)
-  #pinit-arrow((21, 22), (21, 22), start-dx: -1.8cm, end-dx: -2mm, fill: accent-colors.rosewater, thickness: 4pt, start-dy: 2cm, end-dy: 2cm)
+  #pinit-arrow(
+    (21, 22),
+    (21, 22),
+    start-dx: -1.8cm,
+    end-dx: -2mm,
+    fill: accent-colors.rosewater,
+    thickness: 4pt,
+    start-dy: 2cm,
+    end-dy: 2cm,
+  )
 ]
 
 #titled-slide(

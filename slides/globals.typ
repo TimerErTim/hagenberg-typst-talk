@@ -18,7 +18,7 @@
 #let animated(fn) = with-self(self => fn(utils.methods(self)))
 
 #let typst-text-show-rule = ```typst
-#show regex("(?i)typst"): text(fill: rgb("#239dad"), font: "Buenard", weight: "bold", "typst")
+#show regex("(?i)typst"): text(fill: rgb("#239dad"), font: "Buenard", weight: "bold", "typst", size: 1.25em)
 #doc
 ```
 
@@ -250,10 +250,10 @@
   })
 }
 
-#let header-body(header, body) = {
+#let content-description(content, description) = {
   (
-    header: header,
-    body: body,
+    content: content,
+    description: description,
   )
 }
 
@@ -267,29 +267,27 @@
   repeat: auto,
 ) = {
   titled-slide(config: config, repeat: repeat, title, subtitle: subtitle, {
-    show: pad.with(x: 2cm)
-    v(1fr)
+    show: pad.with(x: 2cm, rest: 0cm)
+    show: align.with(top)
     grid(
       columns: (1fr, 1fr, 1fr),
       rows: (auto, auto),
       align: center,
-      gutter: 1cm,
+      column-gutter: 1cm,
+      row-gutter: 5mm,
       ..for (idx, col) in (column-1, column-2, column-3).enumerate() {
         (
           grid.cell(y: 0, x: idx, {
-            show: move.with(dy: 1.5cm)
             show: box.with(
-              stroke: gray-5,
-              fill: gray-0,
+              stroke: base-colors.surface0,
+              fill: base-colors.crust,
               inset: 3mm,
-              radius: 100%,
             )
             set text(size: 16pt, weight: "bold")
-            col.header
+            col.content
           }),
-          grid.cell(y: 1, x: idx, inset: 1cm, fill: gray-4, {
-            set text(fill: gray-0)
-            col.body
+          grid.cell(y: 1, x: idx, inset: 0cm, fill: none, {
+            col.description
           }),
         )
       },
