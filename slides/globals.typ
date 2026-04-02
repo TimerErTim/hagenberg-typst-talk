@@ -23,7 +23,7 @@
 ```
 
 #let slides(handout: false, body) = {
-  set text(lang: "de", font: "Roboto")
+  set text(lang: "de", font: ("Roboto", "Noto Color Emoji"))
   show math.equation: set text(font: "Fira Math")
   show: codly-init.with()
   show: apply-base-theme
