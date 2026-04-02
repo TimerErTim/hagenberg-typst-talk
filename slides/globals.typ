@@ -28,6 +28,12 @@
   show: codly-init.with()
   show: apply-base-theme
 
+  // Pinit for raw blocks
+  show raw: it => {
+    show regex("\{\{pin(\d+)\}\}"): it => pin(eval(it.text.trim().slice(5).rev().slice(2).rev()))
+    it
+  }
+
   let slides = simple-slides(
     config-info(
       title: [typSt],
@@ -45,11 +51,12 @@
     config-common(
       datetime-format: "[day].[month].[year]",
       handout: handout,
-      preamble: {
+      slide-preamble: {
         // Style codly
+        codly-enable()
         codly(
           breakable: false,
-          number-align: right,
+          number-align: right + horizon,
           smart-skip: true,
           languages: codly-languages,
           smart-indent: true,
@@ -278,7 +285,7 @@
       ..for (idx, col) in (column-1, column-2, column-3).enumerate() {
         (
           grid.cell(y: 0, x: idx, {
-            show: box.with(
+            show: block.with(
               stroke: base-colors.surface0,
               fill: base-colors.crust,
               inset: 3mm,

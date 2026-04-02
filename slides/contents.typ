@@ -266,7 +266,7 @@
     columns: if direction == "horizontal" { (1fr, auto, 1fr) } else { 1 },
     rows: if direction == "horizontal" { auto } else { (auto, auto, auto) },
     column-gutter: 2mm,
-    row-gutter: 4mm,
+    row-gutter: 5mm,
     align: if direction == "horizontal" { horizon } else { center },
     code,
     if direction == "horizontal" { sym.arrow.r } else { sym.arrow.b }, eval(code.text, mode: mode),
@@ -282,15 +282,14 @@
     [
       #set text(size: 12pt)
       #codly-enable()
-      #codly(stroke: accent-colors.mauve + 1pt)
-      #typst-compiled(
+      #codly-local(stroke: accent-colors.mauve + 1pt, typst-compiled(
         ```typst
         #for i in range(4) [
            $#i^3 = #calc.pow(i, 3)$\
         ]
         ```,
         direction: "vertical",
-      )
+      ))
     ],
     [
       #show: strong
@@ -340,18 +339,59 @@
 )
 
 #three-bodied-column-slide(
-  [Warum typst?],
-  content-description([
-    
-  ], [
-    asd
-    #pause
-  ]),
+  [Warum typst?
+    #codly-disable()
+  ],
   content-description(
-    [asd],
-    [],
+    [
+      #set text(size: 12pt)
+      #typst-compiled(
+        ```typst
+        = Titl
+        ```,
+        direction: "horizontal",
+      )
+      #typst-compiled(
+        ```typst
+        = Title
+        ```,
+        direction: "horizontal",
+      )
+    ],
+    [
+      #show: strong
+      Echtzeit Rendering
+      #pause
+    ],
   ),
-  content-description([asd], [asd]),
+  content-description(
+    [
+      #set text(size: 12pt)
+      ```bash
+      eza -al $(which typst)
+      > .rwxr-xr-x 16M .../typst
+      ```
+    ],
+    [
+      #show: strong
+      Lightweight CLI Binary\
+      16 MB
+      #pause
+    ],
+  ),
+  content-description(
+    [
+      #set text(size: 12pt)
+      #emoji.warning v0.x #sym.arrow.r Breaking Changes
+
+      #emoji.package *Ökosystem*: klein (aber fein)
+    ],
+    [
+      #show: strong
+      #set text(fill: accent-colors.yellow)
+      Realitätscheck
+    ],
+  ),
 )
 
 #sided-base-slide(
@@ -438,14 +478,134 @@
   )
 ]
 
+// Theorie
+#let holy-trinity-diagram(highlight-section: none) = {
+  let distance = 4.5cm
+  let radius = 1.5cm
+  show raw: highlight.with(fill: base-colors.mantle, extent: 2pt, top-edge: 1em, bottom-edge: -1em / 3)
+  fletcher.diagram(
+    fletcher.node(
+      (90deg, distance),
+      [
+        #set text(fill: color-cycle.at(calc.rem(0, color-cycle.len())))
+        #show: strong
+        Mark\ down
+      ],
+      shape: fletcher.shapes.circle,
+      stroke: if highlight-section == "markdown" { accent-colors.mauve + 3pt } else { base-colors.text + 2pt },
+      width: radius,
+      height: radius,
+      name: "markdown",
+    ),
+    fletcher.node(
+      (330deg, distance),
+      [
+        #set text(fill: color-cycle.at(calc.rem(4, color-cycle.len())))
+        #show: strong
+        Math
+      ],
+      shape: fletcher.shapes.circle,
+      stroke: if highlight-section == "math" { accent-colors.mauve + 3pt } else { base-colors.text + 2pt },
+      width: radius,
+      height: radius,
+      name: "math",
+    ),
+    fletcher.node(
+      (210deg, distance),
+      [
+        #set text(fill: color-cycle.at(calc.rem(3, color-cycle.len())))
+        #show: strong
+        Code
+      ],
+      shape: fletcher.shapes.circle,
+      stroke: if highlight-section == "code" { accent-colors.mauve + 3pt } else { base-colors.text + 2pt },
+      width: radius,
+      height: radius,
+      name: "code",
+    ),
+    fletcher.edge(
+      <markdown>,
+      <math>,
+      "-|>",
+      `$...$`,
+      stroke: if highlight-section == "markdown" { accent-colors.mauve } else { base-colors.overlay0 } + 2pt,
+      shift: 2mm,
+    ),
+    //fletcher.edge(<math>, <markdown>, "-|>", stroke: base-colors.overlay2 + 1.5pt, shift: 2mm),
+    fletcher.edge(
+      <markdown>,
+      <code>,
+      "-|>",
+      `#...`,
+      stroke: if highlight-section == "markdown" { accent-colors.mauve } else { base-colors.overlay0 } + 2pt,
+      shift: 2mm,
+      label-side: left,
+    ),
+    fletcher.edge(
+      <code>,
+      <markdown>,
+      "-|>",
+      `[...]`,
+      stroke: if highlight-section == "code" { accent-colors.mauve } else { base-colors.overlay0 } + 2pt,
+      shift: 2mm,
+    ),
+    fletcher.edge(
+      <code>,
+      <math>,
+      "-|>",
+      `$...$`,
+      stroke: if highlight-section == "code" { accent-colors.mauve } else { base-colors.overlay0 } + 2pt,
+      shift: 2mm,
+    ),
+    fletcher.edge(
+      <math>,
+      <code>,
+      "-|>",
+      `#...`,
+      stroke: if highlight-section == "math" { accent-colors.mauve } else { base-colors.overlay0 } + 2pt,
+      shift: 2mm,
+      label-side: left,
+    ),
+  )
+}
+
 #titled-slide(
-  [Hhj],
-  with-self(self => [
-    #place(center + horizon)[
-      #self.colors.primary-darkest
-    ]
-  ]),
-)
+  [Theorie\ Holy Trinity],
+)[
+  #show: pad.with(right: 2cm)
+  #grid(
+    columns: (auto, 1fr),
+    rows: 1fr,
+    gutter: 1cm,
+    box(inset: 5mm)[
+      #only("1", holy-trinity-diagram())
+      #only("2-", holy-trinity-diagram(highlight-section: "markdown"))
+    ],
+    [
+      #show: pad.with(top: -3cm)
+      #pause
+      #only("3-", if hacodly(
+        highlights: ((
+          line: 3,
+          fill: accent-colors.maroon,
+        ),),
+      ))
+      #only("4-", codly(highlights: ((
+        line: 4,
+        fill: accent-colors.maroon,
+      ),)))
+      #typst-compiled(
+        direction: "vertical",
+        ```typst
+        == A Title
+        *Bold* and _italic_ content.
+        #rect(stroke: red, "Trapped")
+        $ E(X) = sum_(i=1)^n  x_i space P(X = x_i) $
+        ```
+      )
+    ],
+  )
+]
 
 #titled-slide([Lol], with-self(self => [
   #codly(

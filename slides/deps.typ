@@ -5,5 +5,6 @@
 #import "@preview/eqalc:0.1.4": math-to-data
 #import "@preview/lilaq:0.6.0" as lq
 #import "@preview/codly:1.3.0": *
+#let codly-local = local
 #import "@preview/codly-languages:0.1.10": codly-languages
 #import "@preview/pinit:0.2.2": *
