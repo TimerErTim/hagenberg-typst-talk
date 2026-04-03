@@ -269,7 +269,7 @@
     row-gutter: 5mm,
     align: if direction == "horizontal" { horizon } else { center },
     code,
-    if direction == "horizontal" { sym.arrow.r } else { sym.arrow.b }, eval(code.text, mode: mode),
+    if direction == "horizontal" { sym.arrow.r } else { sym.arrow.b }, [#eval(code.text, mode: mode)],
   )
 }
 
@@ -294,7 +294,7 @@
     [
       #show: strong
       Programmierbar\
-      & Doc-as-Code
+      \= Doc-as-Code
       #pause
     ],
   ),
@@ -347,13 +347,25 @@
       #set text(size: 12pt)
       #typst-compiled(
         ```typst
-        = Titl
+        = Head
         ```,
         direction: "horizontal",
       )
       #typst-compiled(
         ```typst
-        = Title
+        = Headi
+        ```,
+        direction: "horizontal",
+      )
+      #typst-compiled(
+        ```typst
+        = Headin
+        ```,
+        direction: "horizontal",
+      )
+      #typst-compiled(
+        ```typst
+        = Heading
         ```,
         direction: "horizontal",
       )
@@ -367,14 +379,15 @@
   content-description(
     [
       #set text(size: 12pt)
+      #set text(size: 16pt)
       ```bash
       eza -al $(which typst)
-      > .rwxr-xr-x 16M .../typst
+      > ... 16M .../typst
       ```
     ],
     [
       #show: strong
-      Lightweight CLI Binary\
+      Lightweight Binary\
       16 MB
       #pause
     ],
