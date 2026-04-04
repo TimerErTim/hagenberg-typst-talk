@@ -87,7 +87,7 @@
   #pause
   #place(left + bottom)[
     #show: rotate.with(0deg, reflow: true)
-    steht auf Typst + vermutlich Geek
+    bentutzt seit 2 Jahren Typst
   ]
   #pause
   #place(left + bottom, dx: 9cm)[
