@@ -17,16 +17,19 @@
 )
 #let animated(fn) = with-self(self => fn(utils.methods(self)))
 
-#let typst-text-show-rule = ```typst
-#show regex("(?i)typst"): text(fill: rgb("#239dad"), font: "Buenard", weight: "bold", "typst", size: 1.25em)
-#doc
-```
+#let typst-text-style(doc) = {
+  set text(fill: rgb("#239dad"), font: "Buenard", weight: "bold", size: 1.25em)
+  doc
+}
 
 #let slides(handout: false, body) = {
   set text(lang: "de", font: ("Roboto", "Noto Color Emoji"))
   show math.equation: set text(font: "Fira Math")
   show: codly-init.with()
   show: apply-base-theme
+
+  // Style typst text
+  show regex("(?i)typst"): typst-text-style[typst]
 
   // Pinit for raw blocks
   show raw: it => {
@@ -70,7 +73,7 @@
     body,
   )
 
-  eval(typst-text-show-rule.text, mode: "markup", scope: (doc: slides))
+  slides
 }
 
 #let master-slide(

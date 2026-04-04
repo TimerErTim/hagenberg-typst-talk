@@ -8,3 +8,4 @@
 #let codly-local = local
 #import "@preview/codly-languages:0.1.10": codly-languages
 #import "@preview/pinit:0.2.2": *
+#import "@preview/zebra:0.1.0": qrcode

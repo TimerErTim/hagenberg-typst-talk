@@ -1063,7 +1063,12 @@
     normalized
   }
   #let (dx, dy, rotation) = random-stuff.chunks(items.len(), exact: true)
-  #let rotated-items = items.zip(rotation).map(((item, rotation)) => rotate(map-rotation(rotation), item, reflow: true)).map(text.with(size: 24pt))
+  #let rotated-items = (
+    items
+      .zip(rotation)
+      .map(((item, rotation)) => rotate(map-rotation(rotation), item, reflow: true))
+      .map(text.with(size: 24pt))
+  )
   #grid(
     columns: (1fr,) * items.len(),
     rows: 9cm,
@@ -1090,4 +1095,67 @@
   )
 ]
 
+#titled-slide([Hands-On])[
+  #show: pad.with(rest: 2cm, top: 0cm, bottom: 1cm)
+  #let typst-app-url = "https://typst.app/project/rdTU7ZweqLkMn0l5Vmpok3"
+  #let github-url = "github.com/TimerErTim/hagenberg-typst-talk"
+  #show link: set text(fill: accent-colors.sapphire)
+  //#show link: underline
 
+  #grid(
+    columns: (1fr, auto, 1fr),
+    gutter: 5mm,
+    align: center,
+    [
+      #box[
+        #let corner-color = accent-colors.sky + 6pt
+        #let corner-size = 1cm
+        #let corner-inset = 4mm
+        #for x in (-1, 1) {
+          for y in (-1, 1) {
+            let h-align = if x == -1 { left } else { right }
+            let v-align = if y == -1 { top } else { bottom }
+            let stroke = (:)
+            if x == -1 {
+              stroke.insert("left", corner-color)
+            } else {
+              stroke.insert("right", corner-color)
+            }
+            if y == -1 {
+              stroke.insert("top", corner-color)
+            } else {
+              stroke.insert("bottom", corner-color)
+            }
+            let corner-pos = h-align + v-align
+            place(corner-pos, box(stroke: stroke, inset: corner-size))
+          }
+        }
+        #show: pad.with(corner-inset)
+        #qrcode(typst-app-url, width: 7cm)
+        #place(center + horizon, box(fill: white, width: 1.8cm, height: 1.8cm)[
+          #set text(size: 2cm)
+          #show: place.with(center, dy: -0.2cm)
+          #show: typst-text-style
+          t
+        ])
+      ]
+
+      #link(typst-app-url)
+    ],
+    grid.cell(stroke: base-colors.surface0 + 2pt)[],
+    [
+      #set align(left)
+      + VS Code (oder ähnliches)
+      + Tinymist Extension
+        \ #box(place(dy: -1.9cm, image("assets/tinymist-extension.png", width: 100%, height: 4cm, fit: "contain")), width: 6cm, height: 2cm, clip 
+      : true)
+      + Clone Repo:\ #link(github-url)
+      + Checkout Branch `hands-on`
+      + Öffne `main.typ`
+      + `Ctrl + K` #sym.arrow `V`
+      #show: place.with(right + bottom, dx: -0.5cm, dy: 0.25cm, clearance: 0pt)
+      //#show: rotate.with(90deg, reflow: true)
+      #image("assets/thumbs-up.png", height: 4cm)
+    ]
+  )
+]
