@@ -1043,7 +1043,7 @@
 
 #titled-slide([Und vieles vieles mehr...])[
   #show: pad.with(rest: 2cm, top: 0cm)
-  #let rng = sj.gen-rng-f(824)
+  #let rng = sj.gen-rng-f(689784)
   #let items = (
     [Packages],
     [Introspection],
@@ -1063,7 +1063,7 @@
     normalized
   }
   #let (dx, dy, rotation) = random-stuff.chunks(items.len(), exact: true)
-  #let rotated-items = items.zip(rotation).map(((item, rotation)) => rotate(map-rotation(rotation), item, reflow: true))
+  #let rotated-items = items.zip(rotation).map(((item, rotation)) => rotate(map-rotation(rotation), item, reflow: true)).map(text.with(size: 24pt))
   #grid(
     columns: (1fr,) * items.len(),
     rows: 9cm,
@@ -1075,7 +1075,7 @@
     }
   )
 
-  #pause
+  #show: only-handoutless.with("2")
   #show: place.with(center + horizon)
   #show: rotate.with(20deg, reflow: true)
   #show: rect.with(width: 20cm, fill: white, stroke: base-colors.mantle)
@@ -1089,3 +1089,5 @@
     ```,
   )
 ]
+
+
