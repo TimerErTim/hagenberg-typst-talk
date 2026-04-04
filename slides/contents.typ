@@ -896,20 +896,21 @@
     ```,
   )
   #only("3", {
-    pinit-point-from(1, pin-dx: -5pt, fill: base-colors.overlay2)[
-      ```typ #text(fill: /*pin4*/red, "Roter Text")```
+    place(left + top, dx: 6cm, dy: 6cm)[
+      #pin(5) ```typ #text(fill: /*pin4*/red, "Roter Text")```
     ]
+    pinit-arrow(5, 1, fill: base-colors.overlay2)
     pinit-point-from(2, pin-dx: -5pt, fill: base-colors.overlay2, offset-dy: -1cm, pin-dy: -5pt, body-dy: -5pt)[
       ```typ #text("Normaler Text")```
     ]
-    let (offset-x, offset-y) = (4.8cm, -1.5cm)
+    let (offset-x, offset-y) = (0cm, -1em)
     pinit-arrow(
       4,
       3,
       fill: accent-colors.red,
-      end-dx: offset-x + 5pt,
+      end-dx: offset-x + 8mm,
       start-dx: offset-x,
-      end-dy: offset-y + 6mm,
+      end-dy: offset-y + 8mm,
       start-dy: offset-y + 5pt,
     )
   })
@@ -942,7 +943,7 @@
   ))
   #{
     show: only.with("2-3")
-    codly(header: [Transformation], )
+    codly(header: [Transformation])
     typst-compiled(
       ```typ
       == Boring Heading
@@ -1001,11 +1002,12 @@
   #only("1", {
     codly(header: [Komplett Überschreiben])
     typst-compiled(
-    ```typ
-    #show "shit": underline(stroke: red)[censored]
-    shitty review, lots of bullshit
-    ```,
-  )})
+      ```typ
+      #show "shit": underline(stroke: red)[censored]
+      shitty review, lots of bullshit
+      ```,
+    )
+  })
   #only("2", codly(
     highlights: (
       (
@@ -1019,11 +1021,12 @@
   #only("2-", {
     show: codly-local.with(header: [Komplett Überschreiben mit RegEx], lang-format: none)
     typst-compiled(
-    ```typ
-    #show regex("\b\w*shit\w*\b"): underline(stroke: red)[censored]
-    shitty review, lots of bullshit
-    ```,
-  )})
+      ```typ
+      #show regex("\b\w*shit\w*\b"): underline(stroke: red)[censored]
+      shitty review, lots of bullshit
+      ```,
+    )
+  })
   #pause
   #pause
   #v(1cm)
