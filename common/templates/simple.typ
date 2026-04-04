@@ -21,3 +21,12 @@
 
   body
 }
+
+#let only-handoutless(visible-subslides, only-cont) = {
+  touying-fn-wrapper(
+    (self: none, ..args) => if not self.handout { utils.only(self: self, ..args) },
+    last-subslide: utils.last-required-subslide(visible-subslides),
+    visible-subslides,
+    only-cont,
+  )
+}

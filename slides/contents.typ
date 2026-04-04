@@ -265,11 +265,18 @@
   grid(
     columns: if direction == "horizontal" { (1fr, auto, 1fr) } else { 1 },
     rows: if direction == "horizontal" { auto } else { (auto, auto, auto) },
-    column-gutter: 2mm,
+    column-gutter: 5mm,
     row-gutter: 5mm,
     align: if direction == "horizontal" { horizon } else { center },
     code,
-    if direction == "horizontal" { sym.arrow.r } else { sym.arrow.b }, [#eval(code.text, mode: mode)],
+    if direction == "horizontal" { sym.arrow.r } else { sym.arrow.b },
+    grid.cell(align: if direction == "horizontal" {
+      left
+    } else { center })[
+      #show: block.with()
+      #show: align.with(left)
+      #eval(code.text, mode: mode)
+    ],
   )
 }
 
@@ -378,7 +385,6 @@
   ),
   content-description(
     [
-      #set text(size: 12pt)
       #set text(size: 16pt)
       ```bash
       eza -al $(which typst)
@@ -418,6 +424,7 @@
     #image("assets/gru-equation.png")
   ],
 )[
+  #pause
   #let equation = include "audience-equation.typ"
   #{
     set text(size: 22pt, fill: accent-colors.mauve)
@@ -458,13 +465,13 @@
       [
         #set text(fill: color-cycle.at(calc.rem(0, color-cycle.len())))
         #show: strong
-        Mark\ down
+        Mark\ up
       ],
       shape: fletcher.shapes.circle,
-      stroke: if highlight-section == "markdown" { accent-colors.mauve + 3pt } else { base-colors.text + 2pt },
+      stroke: if highlight-section == "markup" { accent-colors.mauve + 3pt } else { base-colors.text + 2pt },
       width: radius,
       height: radius,
-      name: "markdown",
+      name: "markup",
     ),
     fletcher.node(
       (330deg, distance),
@@ -493,29 +500,29 @@
       name: "code",
     ),
     fletcher.edge(
-      <markdown>,
+      <markup>,
       <math>,
       "-|>",
       `$...$`,
-      stroke: if highlight-section == "markdown" { accent-colors.mauve } else { base-colors.overlay0 } + 2pt,
+      stroke: if highlight-section == "markup" { accent-colors.yellow } else { base-colors.overlay0 } + 2pt,
       shift: 2mm,
     ),
     //fletcher.edge(<math>, <markdown>, "-|>", stroke: base-colors.overlay2 + 1.5pt, shift: 2mm),
     fletcher.edge(
-      <markdown>,
+      <markup>,
       <code>,
       "-|>",
       `#...`,
-      stroke: if highlight-section == "markdown" { accent-colors.mauve } else { base-colors.overlay0 } + 2pt,
+      stroke: if highlight-section == "markup" { accent-colors.yellow } else { base-colors.overlay0 } + 2pt,
       shift: 2mm,
       label-side: left,
     ),
     fletcher.edge(
       <code>,
-      <markdown>,
+      <markup>,
       "-|>",
       `[...]`,
-      stroke: if highlight-section == "code" { accent-colors.mauve } else { base-colors.overlay0 } + 2pt,
+      stroke: if highlight-section == "code" { accent-colors.yellow } else { base-colors.overlay0 } + 2pt,
       shift: 2mm,
     ),
     fletcher.edge(
@@ -523,7 +530,7 @@
       <math>,
       "-|>",
       `$...$`,
-      stroke: if highlight-section == "code" { accent-colors.mauve } else { base-colors.overlay0 } + 2pt,
+      stroke: if highlight-section == "code" { accent-colors.yellow } else { base-colors.overlay0 } + 2pt,
       shift: 2mm,
     ),
     fletcher.edge(
@@ -531,15 +538,35 @@
       <code>,
       "-|>",
       `#...`,
-      stroke: if highlight-section == "math" { accent-colors.mauve } else { base-colors.overlay0 } + 2pt,
+      stroke: if highlight-section == "math" { accent-colors.yellow } else { base-colors.overlay0 } + 2pt,
       shift: 2mm,
       label-side: left,
     ),
   )
 }
 
+#let holy-trinity-slide(highlight-section: none, content) = {
+  titled-slide(
+    [Theorie\ Modes],
+  )[
+    #show: pad.with(right: 2cm)
+    #grid(
+      columns: (auto, 1fr),
+      rows: 1fr,
+      gutter: 1cm,
+      box(inset: 5mm)[
+        #holy-trinity-diagram(highlight-section: highlight-section)
+      ],
+      [
+        #show: pad.with(top: -3cm)
+        #content
+      ],
+    )
+  ]
+}
+
 #titled-slide(
-  [Theorie\ Holy Trinity],
+  [Theorie\ Modes],
 )[
   #show: pad.with(right: 2cm)
   #grid(
@@ -548,52 +575,514 @@
     gutter: 1cm,
     box(inset: 5mm)[
       #only("1", holy-trinity-diagram())
-      #only("2-", holy-trinity-diagram(highlight-section: "markdown"))
+      #only("2-", holy-trinity-diagram(highlight-section: "markup"))
     ],
     [
       #show: pad.with(top: -3cm)
       #pause
-      #only("3-", if hacodly(
-        highlights: ((
-          line: 3,
-          fill: accent-colors.maroon,
-        ),),
+      #only-handoutless("3-", codly(
+        highlights: (
+          (
+            line: 3,
+            start: 1,
+            end: 1,
+            fill: accent-colors.yellow,
+          ),
+          (
+            line: 3,
+            start: 2,
+            end: none,
+            fill: accent-colors.red,
+          ),
+        ),
       ))
-      #only("4-", codly(highlights: ((
-        line: 4,
-        fill: accent-colors.maroon,
-      ),)))
+      #only-handoutless("4-", codly(highlights: (
+        (
+          line: 4,
+          start: 1,
+          end: 1,
+          fill: accent-colors.yellow,
+        ),
+        (
+          line: 4,
+          start: 2,
+          end: 36,
+          fill: accent-colors.green,
+        ),
+        (
+          line: 4,
+          start: 37,
+          end: 37,
+          fill: accent-colors.yellow,
+        ),
+      )))
       #typst-compiled(
         direction: "vertical",
         ```typst
         == A Title
         *Bold* and _italic_ content.
         #rect(stroke: red, "Trapped")
-        $ E(X) = sum_(i=1)^n  x_i space P(X = x_i) $
-        ```
+        $ E(X) = sum_(i=1)^n x_i P(X = x_i) $
+        ```,
       )
     ],
   )
 ]
 
-#titled-slide([Lol], with-self(self => [
-  #codly(
-    highlighted-lines: (1, 5, 6),
+#holy-trinity-slide(highlight-section: "code")[
+  #only-handoutless("2", codly(
     highlights: (
-      (line: 5, start: 3, end: 5),
+      (
+        line: 1,
+        start: 1,
+        end: 1,
+        fill: accent-colors.yellow,
+      ),
+      (
+        line: 1,
+        start: 2,
+        end: 2,
+        fill: accent-colors.red,
+      ),
+      (
+        line: 5,
+        start: 1,
+        end: 1,
+        fill: accent-colors.red,
+      ),
     ),
+    highlighted-lines: (2, 3, 4).map(it => (it, accent-colors.red.lighten(75%))),
+  ))
+  #typst-compiled(
+    ```typ
+    #{
+      let x = 5
+      let y = 2
+      calc.pow(x, y)
+    }
+    ```,
+    direction: "vertical",
   )
-  ```rust
-  fn main() {
-    for i in 0..10 {
-      println!("Hello, world! {}", i);
+]
+
+#holy-trinity-slide(highlight-section: "code")[
+  #only("2", codly(highlights: (
+    (
+      line: 1,
+      start: 10,
+      end: 10,
+      fill: accent-colors.yellow,
+    ),
+    (line: 1, start: 11, end: 19, fill: accent-colors.green),
+    (line: 1, start: 20, end: 20, fill: accent-colors.yellow),
+  )))
+  #only-handoutless("3", codly(
+    highlights: (
+      (
+        line: 2,
+        start: 19,
+        end: 21,
+        fill: accent-colors.yellow,
+      ),
+      (
+        line: 5,
+        start: 0,
+        end: 2,
+        fill: accent-colors.yellow,
+      ),
+    ),
+    highlighted-lines: (3, 4).map(it => (it, accent-colors.blue.lighten(75%))),
+  ))
+  #show list: set align(left)
+  #typst-compiled(
+    ```typc
+    let eq = $E = m c^2$
+    for i in range(2) [
+      - *Bold* and
+      - _italic_ content
+    ]
+    eq
+    ```,
+    direction: "vertical",
+    mode: "code",
+  )
+]
+
+#holy-trinity-slide(highlight-section: "math")[
+  #only("2", codly(
+    highlights: (
+      (
+        line: 1,
+        start: 19,
+        end: 19,
+        fill: accent-colors.yellow,
+      ),
+      (
+        line: 1,
+        start: 10,
+        end: 18,
+        fill: accent-colors.green,
+      ),
+      (
+        line: 1,
+        start: 9,
+        end: 9,
+        fill: accent-colors.yellow,
+      ),
+    ),
+  ))
+  #only-handoutless("3", codly(
+    highlights: (
+      (
+        line: 3,
+        start: 8,
+        end: 8,
+        fill: accent-colors.yellow,
+      ),
+      (
+        line: 3,
+        start: 9,
+        end: 9,
+        fill: accent-colors.mauve,
+      ),
+      (
+        line: 3,
+        start: 10,
+        end: 21,
+        fill: accent-colors.green,
+      ),
+      (
+        line: 3,
+        start: 22,
+        end: 22,
+        fill: accent-colors.mauve,
+      ),
+      (
+        line: 3,
+        start: 23,
+        end: 23,
+        fill: accent-colors.yellow,
+      ),
+    ),
+  ))
+  #typst-compiled(
+    ```typ
+    Inline: $E = m c^2$
+
+    Block: $ p in [-1, 1] $
+    ```,
+    direction: "vertical",
+  )
+]
+
+#holy-trinity-slide(highlight-section: "math")[
+  #only-handoutless("2", codly(
+    highlights: (
+      (
+        line: 2,
+        start: 12,
+        end: 12,
+        fill: accent-colors.green,
+      ),
+      (
+        line: 4,
+        start: 1,
+        end: 1,
+        fill: accent-colors.green,
+      ),
+    ),
+    highlighted-lines: (3,).map(it => (it, accent-colors.green.lighten(75%))),
+  ))
+  #only-handoutless("3", codly(
+    highlights: (
+      (
+        line: 5,
+        start: 12,
+        end: 12,
+        fill: accent-colors.yellow,
+      ),
+      (
+        line: 5,
+        start: 13,
+        end: 13,
+        fill: accent-colors.yellow,
+      ),
+      (
+        line: 8,
+        start: 1,
+        end: 1,
+        fill: accent-colors.yellow,
+      ),
+    ),
+    highlighted-lines: (6, 7).map(it => (it, accent-colors.blue.lighten(75%))),
+  ))
+  #typst-compiled(
+    ```typ
+    $
+    underbrace([
+        sum_(i=0)^n x_i
+    ], "Math Mode")
+    underbrace(#[
+      + Items on
+      + enumerated list
+    ], "Markup Mode")
+    $
+    ```,
+    direction: "vertical",
+  )
+]
+
+#sided-base-slide(title: [Theorie\ Funktionen], subcontent: [
+  #show: only.with("2-")
+  Alles ist eine Funktion!
+
+  #set text(size: 14pt)
+  #codly-disable()
+  #typst-compiled(
+    ```typ
+    = Title
+    _Italic_
+    ```,
+  )
+  #v(5mm)
+  #typst-compiled(
+    ```typ
+    #heading(
+      "Title")
+    #emph(
+      "Italic")
+    ```,
+  )
+
+])[
+  #codly-enable()
+  #typst-compiled(
+    ```typ
+    #let repeat(
+      cont,
+      n: 1
+    ) = {
+      for i in range(n) {
+        cont
+      }
     }
-    let x = loop {
-      break 1;
-    }
-    println!("x: {}", x);
-    println!("i: {}", i);
-    println!("Hello, world!");
+    #repeat[Hello!]\ /*pin1*/
+    #repeat(n: 3)[Hello! ]
+    ```,
+    direction: "vertical",
+  )
+
+  #set text(size: 12pt)
+  #pinit-point-from(
+    1,
+    offset-dy: -1cm,
+    pin-dy: -5pt,
+    pin-dx: -5pt,
+    body-dy: -5pt,
+    fill: base-colors.overlay2,
+  )[Zeilenumbruch]
+]
+
+#titled-slide([Theorie\ `#set` Rules])[
+  #show: pad.with(rest: 2cm, top: 0cm)
+  Globale Standardwerte
+  #pause
+  #typst-compiled(
+    ```typ
+    Normaler Text /*pin2*/
+    #set text(fill: /*pin3*/red)
+    = Title
+    Roter Text /*pin1*/
+    ```,
+  )
+  #only("3", {
+    pinit-point-from(1, pin-dx: -5pt, fill: base-colors.overlay2)[
+      ```typ #text(fill: /*pin4*/red, "Roter Text")```
+    ]
+    pinit-point-from(2, pin-dx: -5pt, fill: base-colors.overlay2, offset-dy: -1cm, pin-dy: -5pt, body-dy: -5pt)[
+      ```typ #text("Normaler Text")```
+    ]
+    let (offset-x, offset-y) = (4.8cm, -1.5cm)
+    pinit-arrow(
+      4,
+      3,
+      fill: accent-colors.red,
+      end-dx: offset-x + 5pt,
+      start-dx: offset-x,
+      end-dy: offset-y + 6mm,
+      start-dy: offset-y + 5pt,
+    )
+  })
+  #pause
+  #pause
+  #v(5mm)
+  #typst-compiled(
+    ```typ
+    Normaler Text
+    #set align(right)
+    = Title
+    Rechter Text
+    ```,
+  )
+]
+
+#titled-slide([Theorie\ `#show` Rules])[
+  #show: pad.with(rest: 2cm, top: 0cm)
+  Bei X mach Y
+  #pause
+  #only("3", codly(
+    highlights: (
+      (
+        line: 2,
+        start: 16,
+        end: none,
+        fill: accent-colors.mauve,
+      ),
+    ),
+  ))
+  #{
+    show: only.with("2-3")
+    codly(header: [Transformation], )
+    typst-compiled(
+      ```typ
+      == Boring Heading
+      #show heading: it => rect(stroke: red, it)
+      == WUHU, HEEAAADDING
+      ```,
+    )
   }
-  ```
-]))
+  #only("4", codly(
+    highlights: (
+      (
+        line: 2,
+        start: 16,
+        end: none,
+        fill: accent-colors.mauve,
+      ),
+    ),
+  ))
+  #{
+    show: only.with("4")
+    codly(header: [Transformation])
+    typst-compiled(
+      ```typ
+      == Boring Heading
+      #show heading: rect.with(stroke: red)
+      == WUHU, HEEAAADDING
+      ```,
+    )
+  }
+  #{
+    show: only.with("5-")
+    codly(offset: 1, header: [Transformation])
+    typst-compiled(
+      ```typ
+      #show heading: rect.with(stroke: red)
+      == WUHU, HEEAAADDING
+      ```,
+    )
+  }
+
+  #range(3).map(_ => pause).join([])
+  #v(1cm)
+  #codly(header: [`set` & `show` Rules])
+  #typst-compiled(
+    ```typ
+    #show heading: set text(fill: red)
+    = Rote Überschrift
+    Text darunter
+    ```,
+  )
+]
+
+#titled-slide([Theorie\ `#show` Rules])[
+  #show: pad.with(rest: 2cm, top: 0cm)
+  Bei X mach Y
+  #only("1", {
+    codly(header: [Komplett Überschreiben])
+    typst-compiled(
+    ```typ
+    #show "shit": underline(stroke: red)[censored]
+    shitty review, lots of bullshit
+    ```,
+  )})
+  #only("2", codly(
+    highlights: (
+      (
+        line: 1,
+        start: 7,
+        end: 29,
+        fill: accent-colors.mauve,
+      ),
+    ),
+  ))
+  #only("2-", {
+    show: codly-local.with(header: [Komplett Überschreiben mit RegEx], lang-format: none)
+    typst-compiled(
+    ```typ
+    #show regex("\b\w*shit\w*\b"): underline(stroke: red)[censored]
+    shitty review, lots of bullshit
+    ```,
+  )})
+  #pause
+  #pause
+  #v(1cm)
+  #codly(header: [Alles Folgende])
+  #typst-compiled(
+    ```typ
+    #show: rotate.with(20deg)
+    #show: rect.with(stroke: red)
+    = Title
+    Text darunter
+    ```,
+  )
+]
+
+#titled-slide([Und vieles vieles mehr...])[
+  #show: pad.with(rest: 2cm, top: 0cm)
+  #let rng = sj.gen-rng-f(824)
+  #let items = (
+    [Packages],
+    [Introspection],
+    [State],
+    [Locate],
+    [Query],
+    [Context],
+    [Drawing],
+  )
+  #let (rng, random-stuff) = sj.uniform-f(rng, low: 0, high: 1.0, size: items.len() * 3)
+  #let map-rotation(val) = {
+    // val is in [0, 1]
+    let low = -45deg
+    let high = 45deg
+    let range = high - low
+    let normalized = val * range + low
+    normalized
+  }
+  #let (dx, dy, rotation) = random-stuff.chunks(items.len(), exact: true)
+  #let rotated-items = items.zip(rotation).map(((item, rotation)) => rotate(map-rotation(rotation), item, reflow: true))
+  #grid(
+    columns: (1fr,) * items.len(),
+    rows: 9cm,
+    gutter: 1cm,
+    ..for (item, dx, dy) in rotated-items.zip(dx, dy) {
+      let h-align = if dx > 0.5 { left } else { right }
+      let v-align = if dy > 0.5 { top } else { bottom }
+      (grid.cell(item, align: h-align + v-align),)
+    }
+  )
+
+  #pause
+  #show: place.with(center + horizon)
+  #show: rotate.with(20deg, reflow: true)
+  #show: rect.with(width: 20cm, fill: white, stroke: base-colors.mantle)
+  #codly(header: [Alles Folgende])
+  #typst-compiled(
+    ```typ
+    #show: rotate.with(20deg)
+    #show: rect.with(stroke: red)
+    = Title
+    Text darunter
+    ```,
+  )
+]

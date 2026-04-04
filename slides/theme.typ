@@ -22,12 +22,15 @@
   show: catppuccin.with(latte)
   //set page(fill: white)  // We are instead using white background in the slides
 
-
   // Style lilaq diagrams
   show: lq.set-diagram(cycle: color-cycle)
   show: lq.set-spine(stroke: base-colors.overlay2)
   show: lq.set-grid(stroke: base-colors.crust)
+ 
+  doc
+}
 
+#let apply-codly-theme() = {
   // Theme codly
   codly(
     zebra-fill: base-colors.crust,
@@ -38,7 +41,7 @@
     highlighted-default-color: accent-colors.peach.lighten(85%),
     highlight-fill: (color) => color.lighten(75%),
     highlight-stroke: (color) => 1pt + color.lighten(70%),
+    highlight-inset: 0pt,
+    //highlight-outset: 2pt,
   )
- 
-  doc
 }

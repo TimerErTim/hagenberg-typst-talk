@@ -1,7 +1,7 @@
 
 #import "../common/templates/simple.typ": *
 #import "deps.typ": *
-#import "theme.typ": accent-colors, apply-base-theme, base-colors, color-cycle
+#import "theme.typ": accent-colors, apply-base-theme, base-colors, color-cycle, apply-codly-theme
 
 // Touying compatible utils
 #let cetz-canvas = touying-reducer.with(
@@ -30,7 +30,7 @@
 
   // Pinit for raw blocks
   show raw: it => {
-    show regex("\{\{pin(\d+)\}\}"): it => pin(eval(it.text.trim().slice(5).rev().slice(2).rev()))
+    show regex("\/\*pin(\d+)\*\/"): it => pin(eval(it.text.trim().slice(5).rev().slice(2).rev()))
     it
   }
 
@@ -53,7 +53,9 @@
       handout: handout,
       slide-preamble: {
         // Style codly
+        codly-reset()
         codly-enable()
+        apply-codly-theme()
         codly(
           breakable: false,
           number-align: right + horizon,
@@ -61,6 +63,7 @@
           languages: codly-languages,
           smart-indent: true,
           skip-last-empty: true,
+          header-cell-args: (align: left,)
         )
       },
     ),
