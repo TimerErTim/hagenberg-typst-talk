@@ -38,7 +38,7 @@
         .map(((content, alignment)) => grid.cell(align: alignment, content))
     )
   }
-  #place(top + left, block(width: 100%, height: 100%, fill: white.transparentize(25%)))
+  #place(top + left, block(width: 100%, height: 90%, fill: white.transparentize(25%)))
   #place(bottom + center, dy: -2cm, line(length: 95%, stroke: accent-colors.rosewater + 2pt))
   #set text(size: 12pt)
   #place(center + horizon)[
