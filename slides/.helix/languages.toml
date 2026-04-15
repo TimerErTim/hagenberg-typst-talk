@@ -1,0 +1,3 @@
+[language-server.tinymist.config]
+typstExtraArgs = ["main.typ"]
+
