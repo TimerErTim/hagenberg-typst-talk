@@ -27,6 +27,12 @@
   show math.equation: set text(font: "Fira Math")
   show: codly-init.with()
   show: apply-base-theme
+  show: it => if handout {
+    set page(fill: white)
+    it
+  } else {
+    it
+  }
 
   // Style typst text
   show regex("(?i)typst"): typst-text-style[typst]

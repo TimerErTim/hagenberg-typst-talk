@@ -61,17 +61,15 @@
 // About me slide
 #titled-slide([Über mich], subtitle: [], [
   #place(
-    right + horizon,
+    left + horizon,
   )[
-    #show: align.with(left)
+    #show: pad.with(left: 2cm)
     #pin(1)
-    #pad(2cm, left: 5mm, box(stroke: base-colors.overlay2, radius: 3mm, clip: true, image("assets/myself.jpg")))
-    #pin(3)
   ]
-  #show: pad.with(left: 2cm)
+  #show: pad.with(left: 6cm)
   #pause
-  Tim Peko #pin(2)
-  #pinit-arrow(2, (1, 3), fill: accent-colors.rosewater, thickness: 1.5pt)
+  #pin(2) Tim Peko
+  #pinit-arrow(2, 1, fill: accent-colors.rosewater, thickness: 1.5pt)
   \
   #show: block.with(width: 100%, height: 1fr, inset: (bottom: 2cm))
   #pause
@@ -85,12 +83,12 @@
     4. Semester MBI in Hagenberg
   ]
   #pause
-  #place(left + bottom)[
-    #show: rotate.with(0deg, reflow: true)
+  #place(left + top, dy: -3cm, dx: 8cm)[
+    #show: rotate.with(10deg, reflow: true)
     bentutzt seit 2 Jahren Typst
   ]
   #pause
-  #place(left + bottom, dx: 9cm)[
+  #place(left + bottom, dx: 11cm)[
     #show: rotate.with(-15deg, reflow: true)
     erster Vortrag
     #color-cycle.fold(image("assets/spongebob-innocent.png", width: 5cm), (acc, color) => block(
@@ -154,6 +152,66 @@
         ),
       )
     },
+  )
+]
+
+// What is typesetting in general?
+#titled-slide([
+  Was ist Typesetting?
+])[
+  #set text(size: 12pt)
+  #show: pad.with(top: 0cm, rest: 2cm)
+  #grid(
+    columns: (1fr, 1fr),
+    gutter: 1cm,
+    
+    // Links: Textverarbeitungsprogramme
+    grid.cell(fill: base-colors.crust, stroke: accent-colors.peach + 2pt, inset: 1.5em)[
+      #text(weight: "bold", size: 1.2em)[🖨️ Word Processors (Word #box(image("assets/word-logo.png", height: 1em)), Docs)]
+      #v(0.5em)
+      #grid(
+        columns: (1fr, auto),
+        [
+          *Digitale Schreibmaschine*
+          - WYSIWYG
+          - Koppelung
+            - Präsentation
+            - Inhalt
+        ],
+        image("assets/word-example.png", width: 3cm)
+      )      
+    ],
+
+    // Rechts: Textsatzsysteme
+    grid.cell(fill: base-colors.crust, stroke: accent-colors.sapphire + 2pt, inset: 1.5em)[
+      #text(weight: "bold", size: 1.2em)[📝 Typesetting (#box(image("assets/latex-logo.svg", height: 1em)), Typst, #box(image("assets/markdown-logo.svg", height: 1em)))]
+      #v(0.5em)
+      #grid(
+        columns: (1fr, auto),
+        [
+          *Dokument Compiler*
+          - Deklaratives Markup
+          - Intention #sym.arrow Engine #sym.arrow Doc
+          - Trennung
+            - Präsentation
+            - Inhalt
+        ],
+        [
+          #set text(size: 9pt)
+          #codly(enabled: false)
+          #show: box.with(stroke: none, fill: white, inset: 2mm)
+          #let code = ```typ
+          #set align(center)
+          == Learning Diary
+          = #underline[Tim Peko]
+          ```
+          #rect(code, stroke: base-colors.crust, fill: base-colors.base)
+          #set align(center)
+          #sym.arrow.b
+          #rect(eval(code.text, mode: "markup"), stroke: base-colors.crust)
+        ]
+      )
+    ]
   )
 ]
 
@@ -451,6 +509,105 @@
       ],
       stroke: accent-colors.mauve + 2pt,
     ),
+  )
+]
+
+#sided-base-slide(
+  title: [
+    Demo:\
+    Learning Diary
+  ],
+  subcontent: [
+    #set text(size: 11pt, fill: base-colors.overlay2)
+     Quelle: Amelie Rogi
+  ],
+)[
+  #show figure: set align(left)
+  //#show: figure.with(caption: [Learning Diary Template], numbering: none)
+  #show: rect.with()
+  #set text(size: 11pt, fill: base-colors.overlay2)
+  #grid(
+    columns: 2,
+    {
+      image("assets/Learning Diary Template.pdf", page: 1)
+      place(left + bottom)[1]
+    },
+    {
+      image("assets/Learning Diary Template.pdf", page: 2)
+      place(left + bottom)[2]
+    },
+  )
+]
+
+// Hands-On Reference
+#titled-slide([Hands-On])[
+  #show: pad.with(rest: 2cm, top: 0cm, bottom: 1cm)
+  #let typst-qr-url = "https://typst.app/project/rdTU7ZweqLkMn0l5Vmpok3"
+  #let typst-manual-url = "https://a29.at/7Ygz6p"
+  #let github-url = "github.com/TimerErTim/hagenberg-typst-talk"
+  #show link: set text(fill: accent-colors.sapphire)
+  //#show link: underline
+
+  #grid(
+    columns: (1fr, auto, 1fr),
+    gutter: 5mm,
+    align: center,
+    [
+      #show: pad.with(top: -0.5cm)
+      #box[
+        #let corner-color = accent-colors.sky + 6pt
+        #let corner-size = 1cm
+        #let corner-inset = 4mm
+        #for x in (-1, 1) {
+          for y in (-1, 1) {
+            let h-align = if x == -1 { left } else { right }
+            let v-align = if y == -1 { top } else { bottom }
+            let stroke = (:)
+            if x == -1 {
+              stroke.insert("left", corner-color)
+            } else {
+              stroke.insert("right", corner-color)
+            }
+            if y == -1 {
+              stroke.insert("top", corner-color)
+            } else {
+              stroke.insert("bottom", corner-color)
+            }
+            let corner-pos = h-align + v-align
+            place(corner-pos, box(stroke: stroke, inset: corner-size))
+          }
+        }
+        #show: pad.with(corner-inset)
+        #qrcode(typst-qr-url, width: 7cm)
+        #place(center + horizon, box(fill: white, width: 1.8cm, height: 1.8cm)[
+          #set text(size: 2cm)
+          #show: place.with(center, dy: -0.2cm)
+          #show: typst-text-style
+          t
+        ])
+      ]
+
+      #link(typst-manual-url)
+    ],
+    grid.cell(stroke: base-colors.surface0 + 2pt)[],
+    [
+      #set align(left)
+      + VS Code (oder ähnliches)
+      + Tinymist Extension
+        \ #box(
+          place(dy: -1.9cm, image("assets/tinymist-extension.png", width: 100%, height: 4cm, fit: "contain")),
+          width: 6cm,
+          height: 2cm,
+          clip: true,
+        )
+      + Clone Repo:\ #link(github-url)
+      + Checkout Branch `hands-on`
+      + Öffne `main.typ`
+      + `Ctrl + K` #sym.arrow `V`
+      #show: place.with(right + bottom, dx: -0.5cm, dy: 0.25cm, clearance: 0pt)
+      //#show: rotate.with(90deg, reflow: true)
+      #image("assets/thumbs-up.png", height: 4cm)
+    ],
   )
 ]
 
@@ -1095,67 +1252,9 @@
   )
 ]
 
-#titled-slide([Hands-On])[
-  #show: pad.with(rest: 2cm, top: 0cm, bottom: 1cm)
-  #let typst-app-url = "https://typst.app/project/rdTU7ZweqLkMn0l5Vmpok3"
-  #let github-url = "github.com/TimerErTim/hagenberg-typst-talk"
-  #show link: set text(fill: accent-colors.sapphire)
-  //#show link: underline
-
-  #grid(
-    columns: (1fr, auto, 1fr),
-    gutter: 5mm,
-    align: center,
-    [
-      #box[
-        #let corner-color = accent-colors.sky + 6pt
-        #let corner-size = 1cm
-        #let corner-inset = 4mm
-        #for x in (-1, 1) {
-          for y in (-1, 1) {
-            let h-align = if x == -1 { left } else { right }
-            let v-align = if y == -1 { top } else { bottom }
-            let stroke = (:)
-            if x == -1 {
-              stroke.insert("left", corner-color)
-            } else {
-              stroke.insert("right", corner-color)
-            }
-            if y == -1 {
-              stroke.insert("top", corner-color)
-            } else {
-              stroke.insert("bottom", corner-color)
-            }
-            let corner-pos = h-align + v-align
-            place(corner-pos, box(stroke: stroke, inset: corner-size))
-          }
-        }
-        #show: pad.with(corner-inset)
-        #qrcode(typst-app-url, width: 7cm)
-        #place(center + horizon, box(fill: white, width: 1.8cm, height: 1.8cm)[
-          #set text(size: 2cm)
-          #show: place.with(center, dy: -0.2cm)
-          #show: typst-text-style
-          t
-        ])
-      ]
-
-      #link(typst-app-url)
-    ],
-    grid.cell(stroke: base-colors.surface0 + 2pt)[],
-    [
-      #set align(left)
-      + VS Code (oder ähnliches)
-      + Tinymist Extension
-        \ #box(place(dy: -1.9cm, image("assets/tinymist-extension.png", width: 100%, height: 4cm, fit: "contain")), width: 6cm, height: 2cm, clip 
-      : true)
-      + Clone Repo:\ #link(github-url)
-      + Checkout Branch `hands-on`
-      + Öffne `main.typ`
-      + `Ctrl + K` #sym.arrow `V`
-      #show: place.with(right + bottom, dx: -0.5cm, dy: 0.25cm, clearance: 0pt)
-      //#show: rotate.with(90deg, reflow: true)
-      #image("assets/thumbs-up.png", height: 4cm)
-    ]
-  )
+// Ending
+#focus-slide[
+  #set text(size: 32pt)
+  Danke
+  #image("assets/q-n-a.png", width: 40%)
 ]
