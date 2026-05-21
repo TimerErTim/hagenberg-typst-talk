@@ -85,7 +85,7 @@
   #pause
   #place(left + top, dy: -3cm, dx: 8cm)[
     #show: rotate.with(10deg, reflow: true)
-    bentutzt seit 2 Jahren Typst
+    benutzt seit 2 Jahren Typst
   ]
   #pause
   #place(left + bottom, dx: 11cm)[
@@ -483,7 +483,8 @@
   ],
 )[
   #pause
-  #let equation = include "audience-equation.typ"
+  #import "audience-equation.typ": audience-equation
+  #let equation = audience-equation
   #{
     set text(size: 22pt, fill: accent-colors.mauve)
     equation

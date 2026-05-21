@@ -48,7 +48,7 @@
       title: [typSt],
       subtitle: [Wie man Dokumente programmiert],
       author: [Tim Peko],
-      date: datetime(year: 2026, month: 1, day: 22),
+      date: datetime(year: 2026, month: 06, day: 08),
       institution: [FH Hagenberg],
       logo: box(
         radius: 6pt,

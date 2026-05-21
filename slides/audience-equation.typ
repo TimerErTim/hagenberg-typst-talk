@@ -1,3 +1,3 @@
-$
-  f(x) = 8 x^e sin(x)
+#let audience-equation = $
+  f(x) = x^2 + 2x + 3
 $
