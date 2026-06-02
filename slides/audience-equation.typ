@@ -1,3 +1,3 @@
 #let audience-equation = $
-  f(x) = x^2 + 2x + 3
+  f(x) = 3 x ^ 2 + x ^ 4 - 2 x
 $
